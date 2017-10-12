@@ -143,12 +143,12 @@ void Model::createShaders()
     fs.close();
 }
 
-void Model::drawModel()
+void Model::drawModel(float angle, float X, float Y, float Z)
 {
     modelMatrix.setToIdentity(); //M=I
-    //modelMatrix.rotate(90, 0, 1, 0);
-    //modelMatrix.scale(invDiag, invDiag, invDiag); //M=I*S
-    //modelMatrix.translate(-midPoint); //M=I*S*T
+    modelMatrix.rotate(angle, X, Y, Z);
+    modelMatrix.scale(invDiag, invDiag, invDiag); //M=I*S
+    modelMatrix.translate(-midPoint); //M=I*S*T
 
     glBindVertexArray(vao);
     glUseProgram(shaderProgram);

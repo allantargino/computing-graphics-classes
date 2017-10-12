@@ -13,6 +13,10 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLExtraFunctions {
 public:
     OpenGLWidget(QWidget* parent = 0);
     std::shared_ptr<Model> model = nullptr;
+    float angle;
+    float X;
+    float Y;
+    float Z;
 
 protected:
     void initializeGL();
@@ -26,6 +30,8 @@ public slots:
     void showFileOpenDialog();
     void loadSampleModel();
     void rotateObject(int value);
-
+    void AxisXChecked(bool checked);
+    void AxisYChecked(bool checked);
+    void AxisZChecked(bool checked);
 };
 #endif // OPENGLWIDGET_H
