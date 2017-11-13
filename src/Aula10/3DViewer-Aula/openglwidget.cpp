@@ -3,10 +3,6 @@
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
 {
-    angle=0.0;
-    X=0.0;
-    Y=1.0;
-    Z=0.0;
 }
 void OpenGLWidget::initializeGL()
 {
@@ -98,50 +94,22 @@ void OpenGLWidget::showFileOpenDialog()
 
 void OpenGLWidget::loadSampleModel()
 {
-    QString fileName = "C:\\Repos\\computing-graphics-classes\\off-models\\bunny.off";
+    QString fileName = "..\\..\\..\\off-models\\Misc\\bunny.off";
+    int shaderIndex = 3;
 
-    model = std::make_shared<Model>(this);
-    model->readOFFFile(fileName);
-    emit statusBarMessage(QString("Vertices: \%1 , Faces : \%2").arg(model->numVertices).arg(model->numFaces));
+    if ( model )
+        shaderIndex = model -> shaderIndex ;
+    model = std :: make_shared <Model >( this );
+    model -> shaderIndex = shaderIndex ;
+    model -> readOFFFile ( fileName );
+
+    model -> trackBall . resizeViewport ( width () , height ());
+
+    emit statusBarMessage ( QString (" Vertices : \%1 , Faces : \%2"
+                                     ).arg(model -> numVertices ).arg(model -> numFaces ));
+    emit enableComboShaders ( true );
 
     update();
-}
-
-void OpenGLWidget::rotateObject(int value)
-{
-    qDebug("Angle: %d", value);
-    angle = value;
-
-    //paintGL();
-    update();
-}
-
-void OpenGLWidget::AxisXChecked(bool checked){
-    if(checked)
-        X=1.0;
-    else
-        X=0.0;
-}
-
-void OpenGLWidget::AxisYChecked(bool checked){
-    if(checked)
-        Y=1.0;
-    else
-        Y=0.0;
-}
-
-void OpenGLWidget::AxisZChecked(bool checked){
-    if(checked)
-        Z=1.0;
-    else
-        Z=0.0;
-}
-
-void AxisChecked(bool checked, float &axis){
-    if(checked)
-        axis=1.0;
-    else
-        axis=0.0;
 }
 
 void OpenGLWidget :: changeShader ( int shaderIndex )

@@ -8,46 +8,41 @@
 #include "model.h"
 #include "light.h"
 #include "camera.h"
+#include "trackball.h"
 
-class OpenGLWidget : public QOpenGLWidget, protected QOpenGLExtraFunctions {
+class OpenGLWidget : public QOpenGLWidget, protected QOpenGLExtraFunctions
+{
     Q_OBJECT
 
-public:
-    OpenGLWidget(QWidget* parent = 0);
+  public:
+    OpenGLWidget(QWidget *parent = 0);
     std::shared_ptr<Model> model = nullptr;
-    float angle;
-    float X;
-    float Y;
-    float Z;
 
     Light light;
     Camera camera;
 
-    void mouseMoveEvent ( QMouseEvent * event );
-    void mousePressEvent ( QMouseEvent * event );
-    void mouseReleaseEvent ( QMouseEvent * event );
-    QTimer timer ;
+    void mouseMoveEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    QTimer timer;
 
-protected:
+    TrackBall trackBall;
+
+  protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
 
-signals:
+  signals:
     void statusBarMessage(QString);
     void enableComboShaders(bool);
 
-public slots:
+  public slots:
     void showFileOpenDialog();
     void loadSampleModel();
-    void rotateObject(int value);
-    void AxisXChecked(bool checked);
-    void AxisYChecked(bool checked);
-    void AxisZChecked(bool checked);
 
     void changeShader(int);
 
-    void animate ();
-
+    void animate();
 };
 #endif // OPENGLWIDGET_H
