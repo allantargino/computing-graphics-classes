@@ -42,7 +42,7 @@ public:
     void destroyShaders();
 
     void readOFFFile(const QString& fileName);
-    void drawModel();
+    void drawModel(float x, float y, float z);
 
     QMatrix4x4 modelMatrix;
     QVector3D midPoint;

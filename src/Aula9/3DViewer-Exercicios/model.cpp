@@ -168,9 +168,10 @@ void Model::createShaders()
     }
 }
 
-void Model::drawModel()
+void Model::drawModel(float x, float y, float z)
 {
     modelMatrix . setToIdentity ();
+    modelMatrix . translate (x, y, z );
     modelMatrix . scale ( invDiag , invDiag , invDiag );
     modelMatrix . translate (- midPoint );
     GLuint locModel = 0;

@@ -45,27 +45,17 @@
      <string>Load Bunny</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="updateProjection">
-    <property name="geometry">
-     <rect>
-      <x>732</x>
-      <y>190</y>
-      <width>281</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Update Projection</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="NearFieldTxt">
     <property name="geometry">
      <rect>
-      <x>780</x>
+      <x>770</x>
       <y>160</y>
       <width>61</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>0.1</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -79,6 +69,32 @@
     </property>
     <property name="text">
      <string>Near:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>160</y>
+      <width>55</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Far:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="FarFieldTxt">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>160</y>
+      <width>61</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>20.0</string>
     </property>
    </widget>
   </widget>
@@ -193,6 +209,22 @@
    <hints>
     <hint type="sourcelabel">
      <x>810</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>310</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>FarFieldTxt</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>openGLWidget</receiver>
+   <slot>changeFarField(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>920</x>
      <y>210</y>
     </hint>
     <hint type="destinationlabel">

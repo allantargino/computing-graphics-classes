@@ -17,7 +17,7 @@ public :
     void computeViewMatrix ();
     void resizeViewport (int width , int height );
 
-    float nearField = 1.0f;
+    float nearField = 0.1f;
     float farField = 20.0f;
 
     float radius = 2.0f;

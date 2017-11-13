@@ -54,7 +54,9 @@ void OpenGLWidget::paintGL()
     glUniformMatrix4fv (locProjection, 1, GL_FALSE , camera.projectionMatrix.data());
     glUniformMatrix4fv (locView, 1, GL_FALSE , camera.viewMatrix.data());
 
-    model->drawModel();
+    model->drawModel(-1.0f,0.0f,0.0f);
+
+    model->drawModel(1.0f,0.0f,0.0f);
 }
 
 void OpenGLWidget::showFileOpenDialog()
@@ -130,8 +132,10 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *event)
 
 void OpenGLWidget::changeNearField(QString value){
     camera.nearField = value.toFloat();
+    resizeGL(width(), height());
 }
 
 void OpenGLWidget::changeFarField(QString value){
     camera.farField = value.toFloat();
+    resizeGL(width(), height());
 }
