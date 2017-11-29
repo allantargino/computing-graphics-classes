@@ -22,7 +22,6 @@ void OpenGLWidget::initializeGL(){
     createVBOs ();
 }
 
-
 void OpenGLWidget::resizeGL(int width, int height){
     glViewport(0, 0, width, height);
 }
@@ -32,22 +31,12 @@ void OpenGLWidget::paintGL(){
     glClearColor (0 ,0 ,0 ,1);
 
     glUseProgram (shaderProgram);
-    //glBindVertexArray (vao);
-    //glDrawElements (GL_TRIANGLES ,2 * 3, GL_UNSIGNED_INT ,0);
+    glBindVertexArray(vao);
 
     glEnable(GL_POINT_SPRITE);
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
     glDrawArrays(GL_POINTS, 0, 3);
-}
-
-void OpenGLWidget::toggleBackgroundColor ( bool changeBColor ){
-    makeCurrent ();
-    if (changeBColor)
-        glClearColor (0 ,0 ,0 ,1);
-    else
-        glClearColor (1 ,1 ,1 ,1);
-    update ();
 }
 
 
@@ -202,9 +191,8 @@ void OpenGLWidget::createVBOs(){
     makeCurrent ();
     destroyVBOs ();
 
-    GLuint VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
     // Position data
     const GLfloat pointPos[] = {
@@ -225,22 +213,22 @@ void OpenGLWidget::createVBOs(){
         0.3f, 0.5f, 0.3f
     };
 
-    glGenBuffers(3, VBO);
+    glGenBuffers(3, vbo);
 
     // VBO for position data
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(pointPos), pointPos, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(0);
 
     // VBO for color data
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(pointCol), pointCol, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(1);
 
     // VBO for radius data
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(pointRad), pointRad, GL_STATIC_DRAW);
     glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(2);
@@ -250,51 +238,11 @@ void OpenGLWidget::destroyVBOs()
 {
     makeCurrent ();
 
-    glDeleteBuffers(1, & vboVertices );
-    glDeleteBuffers (1, & vboColors );
-    glDeleteBuffers (1, & vboIndices );
     glDeleteVertexArrays (1, &vao);
 
-    vboVertices = 0;
-    vboIndices = 0;
-    vboColors = 0;
+    int sizeVBOs = sizeof(vbo) / sizeof(float);
+    for (int i = 0; i < sizeVBOs; ++i)
+        vbo[i] = 0;
+
     vao = 0;
-}
-
-
-void OpenGLWidget::toggleDiagonal( bool changeDiagonal )
-{
-    makeCurrent ();
-    glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER , vboIndices );
-    unsigned int * indices = ( unsigned int *)glMapBufferRange(
-    GL_ELEMENT_ARRAY_BUFFER , 0, 2 * 3 * sizeof ( unsigned int),
-    GL_MAP_WRITE_BIT );
-
-    if(changeDiagonal){
-        indices [0] = 0; indices [1] = 1; indices [2] = 3;
-        indices [3] = 1; indices [4] = 2; indices [5] = 3;
-    }else{
-        indices [0] = 0; indices [1] = 1; indices [2] = 2;
-        indices [3] = 0; indices [4] = 2; indices [5] = 3;
-    }
-
-    glUnmapBuffer ( GL_ELEMENT_ARRAY_BUFFER );
-    update ();
-}
-
-void OpenGLWidget::changeColor(int color){
-    qDebug ("Color was changed to: %d", color);
-    float convertedColor = color/255.0;
-    qDebug ("Color was changed to: %f", convertedColor);
-
-    makeCurrent ();
-    glBindBuffer(GL_ARRAY_BUFFER , vboColors);
-    float* colors = (float*)glMapBufferRange(GL_ARRAY_BUFFER, 0, 16 * sizeof (float), GL_MAP_WRITE_BIT);
-
-    colors[0] = convertedColor;
-    colors[1] = convertedColor;
-    colors[2] = convertedColor;
-
-    glUnmapBuffer (GL_ARRAY_BUFFER);
-    update ();
 }

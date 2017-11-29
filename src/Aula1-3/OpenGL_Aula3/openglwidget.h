@@ -20,28 +20,14 @@ public:
     void destroyVBOs();
     void destroyShaders();
 
-    GLuint vboVertices = 0;
-    GLuint vboColors = 0;
-    GLuint vboIndices = 0;
-
     GLuint vao = 0;
-    GLuint VBO[3];
-
-    std::unique_ptr<QVector4D []> vertices = nullptr;
-    std::unique_ptr<QVector4D []> colors = nullptr;
-    std::unique_ptr<unsigned int[]> indices = nullptr;
+    GLuint vbo[3];
 
 protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
 
-signals:
-
-public slots:
-    void toggleBackgroundColor(bool);
-    void toggleDiagonal(bool);
-    void changeColor(int);
 };
 
 #endif // OPENGLWIDGET_H
