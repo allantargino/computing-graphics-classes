@@ -38,7 +38,7 @@ void OpenGLWidget::paintGL(){
     glEnable(GL_POINT_SPRITE);
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-    glDrawArrays(GL_POINTS, 0, 3);
+    glDrawArrays(GL_POINTS, 0, 4);
 }
 
 void OpenGLWidget::toggleBackgroundColor ( bool changeBColor ){
@@ -173,12 +173,14 @@ void OpenGLWidget::createVBOs(){
         -0.5f, -0.5f, 0.0f,
         0.5f,  -0.5f, 0.0f,
         0.0f,   0.5f, 0.0f,
+        0.3f,   0.3f, 0.0f
     };
 
     // Color data
     const GLfloat pointCol[] = {
         1.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 1.0f
     };
 

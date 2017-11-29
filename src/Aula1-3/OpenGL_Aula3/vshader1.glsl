@@ -8,7 +8,7 @@ out vec4 v2fcolor;
 void main ()
 {
     // gl_Position ->out builtin variable
-    gl_PointSize = 10.0;
+    gl_PointSize = 20.0;
     gl_Position = vPosition ;
     v2fcolor = vColors ;
 }
