@@ -220,8 +220,12 @@ void OpenGLWidget::createVBOs(){
         0.0f, 0.0f, 1.0f
     };
 
+    // Radius data
+    const GLfloat pointRad[] = {
+        0.3f, 0.5f, 0.3f
+    };
 
-    glGenBuffers(2, VBO);
+    glGenBuffers(3, VBO);
 
     // VBO for position data
     glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
@@ -234,6 +238,12 @@ void OpenGLWidget::createVBOs(){
     glBufferData(GL_ARRAY_BUFFER, sizeof(pointCol), pointCol, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(1);
+
+    // VBO for radius data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pointRad), pointRad, GL_STATIC_DRAW);
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(2);
 }
 
 void OpenGLWidget::destroyVBOs()

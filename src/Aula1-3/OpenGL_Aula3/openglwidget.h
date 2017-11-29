@@ -25,7 +25,7 @@ public:
     GLuint vboIndices = 0;
 
     GLuint vao = 0;
-    GLuint VBO[2];
+    GLuint VBO[3];
 
     std::unique_ptr<QVector4D []> vertices = nullptr;
     std::unique_ptr<QVector4D []> colors = nullptr;

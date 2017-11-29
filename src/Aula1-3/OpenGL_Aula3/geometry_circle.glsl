@@ -4,6 +4,7 @@ layout (points) in;
 layout (line_strip, max_vertices = 101) out;
 
 in vec3 vs_color[];
+in float vs_radius[];
 
 out vec3 fs_color;
 
@@ -17,7 +18,8 @@ void main()
         fs_color = vs_color[i];
         gl_PointSize = 3.0f;
 
-        float radius = 0.3f;
+        //float radius = 0.3f;
+        float radius = vs_radius[i];
 
         float pi_2 = pi * 2;
         float step = pi_2 / divisions;
