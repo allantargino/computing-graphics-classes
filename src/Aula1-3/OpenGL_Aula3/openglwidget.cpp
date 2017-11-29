@@ -28,12 +28,17 @@ void OpenGLWidget::resizeGL(int width, int height){
 }
 
 void OpenGLWidget::paintGL(){
-    glClear ( GL_COLOR_BUFFER_BIT );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor (0 ,0 ,0 ,1);
 
     glUseProgram (shaderProgram);
-    glBindVertexArray (vao);
-    glDrawElements (GL_TRIANGLES ,2 * 3, GL_UNSIGNED_INT ,0);
+    //glBindVertexArray (vao);
+    //glDrawElements (GL_TRIANGLES ,2 * 3, GL_UNSIGNED_INT ,0);
+
+    glEnable(GL_POINT_SPRITE);
+    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+
+    glDrawArrays(GL_POINTS, 0, 3);
 }
 
 void OpenGLWidget::toggleBackgroundColor ( bool changeBColor ){
@@ -159,50 +164,38 @@ void OpenGLWidget::createVBOs(){
     makeCurrent ();
     destroyVBOs ();
 
-    vertices = std :: make_unique < QVector4D [] >(4);
-    colors = std :: make_unique < QVector4D [] >(4);
-    indices = std :: make_unique < unsigned int [] >(2 * 3);
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
 
-    // create four vertices to define a square
-    vertices [0] = QVector4D ( -0.5 , -0.5 ,0 ,1);
-    vertices [1] = QVector4D ( 0.5 , -0.5 ,0 ,1);
-    vertices [2] = QVector4D ( 0.5 , 0.5 ,0 ,1);
-    vertices [3] = QVector4D ( -0.5 , 0.5 ,0 ,1);
+    // Position data
+    const GLfloat pointPos[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f,  -0.5f, 0.0f,
+        0.0f,   0.5f, 0.0f,
+    };
 
-    // create colors for the vertices
-    colors [0] = QVector4D (1 ,0 ,0 ,1); // red
-    colors [1] = QVector4D (0 ,1 ,0 ,1); // green
-    colors [2] = QVector4D (0 ,0 ,1 ,1); // blue
-    colors [3] = QVector4D (1 ,1 ,0 ,1); // yellow
+    // Color data
+    const GLfloat pointCol[] = {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f
+    };
 
-    // topology of the mesh ( square )
-    indices [0] = 0;
-    indices [1] = 1;
-    indices [2] = 2;
-    indices [3] = 2;
-    indices [4] = 3;
-    indices [5] = 0;
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    glGenBuffers(2, VBO);
 
-    glGenBuffers(1, & vboVertices );
-    glBindBuffer( GL_ARRAY_BUFFER , vboVertices );
-    glBufferData( GL_ARRAY_BUFFER , 4 * sizeof ( QVector4D ), vertices .
-    get () , GL_STATIC_DRAW );
-    glVertexAttribPointer(0, 4, GL_FLOAT , GL_FALSE , 0, nullptr );
+    // VBO for position data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pointPos), pointPos, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(0);
 
-    glGenBuffers (1, & vboColors );
-    glBindBuffer ( GL_ARRAY_BUFFER , vboColors );
-    glBufferData ( GL_ARRAY_BUFFER , 4 * sizeof ( QVector4D ), colors.get(), GL_DYNAMIC_DRAW);
-    glVertexAttribPointer (1, 4, GL_FLOAT , GL_FALSE , 0, nullptr );
-    glEnableVertexAttribArray (1);
-
-    glGenBuffers (1, & vboIndices );
-    glBindBuffer ( GL_ELEMENT_ARRAY_BUFFER , vboIndices );
-    glBufferData ( GL_ELEMENT_ARRAY_BUFFER , 2 * 3 * sizeof ( unsigned
-    int), indices.get () , GL_DYNAMIC_DRAW);
+    // VBO for color data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pointCol), pointCol, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+    glEnableVertexAttribArray(1);
 }
 
 void OpenGLWidget::destroyVBOs()
