@@ -3,5 +3,6 @@
         <file>vshader1.glsl</file>
         <file>fshader1.glsl</file>
         <file>geometry_passthrough.glsl</file>
+        <file>geometry_circle.glsl</file>
     </qresource>
 </RCC>

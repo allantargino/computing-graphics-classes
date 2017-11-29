@@ -38,7 +38,7 @@ void OpenGLWidget::paintGL(){
     glEnable(GL_POINT_SPRITE);
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-    glDrawArrays(GL_POINTS, 0, 4);
+    glDrawArrays(GL_POINTS, 0, 3);
 }
 
 void OpenGLWidget::toggleBackgroundColor ( bool changeBColor ){
@@ -57,7 +57,7 @@ void OpenGLWidget::createShaders()
     destroyShaders ();
     QString vertexShaderFile (":/shaders/vshader1.glsl");
     QString fragmentShaderFile (":/shaders/fshader1.glsl");
-    QString geometryShaderFile (":/shaders/geometry_passthrough.glsl");
+    QString geometryShaderFile (":/shaders/geometry_circle.glsl");
 
     QFile vs( vertexShaderFile );
     QFile fs( fragmentShaderFile );
@@ -210,15 +210,13 @@ void OpenGLWidget::createVBOs(){
     const GLfloat pointPos[] = {
         -0.5f, -0.5f, 0.0f,
         0.5f,  -0.5f, 0.0f,
-        0.0f,   0.5f, 0.0f,
-        0.3f,   0.3f, 0.0f
+        0.0f,   0.5f, 0.0f
     };
 
     // Color data
     const GLfloat pointCol[] = {
         1.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 1.0f
     };
 

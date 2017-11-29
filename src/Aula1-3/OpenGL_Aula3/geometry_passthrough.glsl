@@ -1,4 +1,4 @@
-#version 330
+#version 400
 
 layout (points) in;
 layout (points) out;
