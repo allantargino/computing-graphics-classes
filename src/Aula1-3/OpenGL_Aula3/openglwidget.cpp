@@ -57,20 +57,25 @@ void OpenGLWidget::createShaders()
     destroyShaders ();
     QString vertexShaderFile (":/shaders/vshader1.glsl");
     QString fragmentShaderFile (":/shaders/fshader1.glsl");
+    QString geometryShaderFile (":/shaders/geometry_passthrough.glsl");
 
     QFile vs( vertexShaderFile );
     QFile fs( fragmentShaderFile );
+    QFile gs( geometryShaderFile );
 
     vs. open ( QFile :: ReadOnly | QFile :: Text );
     fs. open ( QFile :: ReadOnly | QFile :: Text );
+    gs. open ( QFile :: ReadOnly | QFile :: Text );
 
-    QTextStream streamVs (& vs), streamFs (& fs);
+    QTextStream streamVs (& vs), streamFs (& fs), streamGs (& gs);
 
     QString qtStringVs = streamVs . readAll ();
     QString qtStringFs = streamFs . readAll ();
+    QString qtStringGs = streamGs . readAll ();
 
     std :: string stdStringVs = qtStringVs . toStdString ();
     std :: string stdStringFs = qtStringFs . toStdString ();
+    std :: string stdStringGs = qtStringGs . toStdString ();
 
     // Create an empty vertex shader handle
     GLuint vertexShader = 0;
@@ -97,6 +102,35 @@ void OpenGLWidget::createShaders()
         glDeleteShader( vertexShader );
         return ;
     }
+
+
+
+    // Create an empty geometry shader handle
+    GLuint geometryShader = 0;
+    geometryShader = glCreateShader ( GL_GEOMETRY_SHADER );
+    // Send the fragment shader source code to GL
+    // Note that std :: string ’s . c_str is NULL character terminated .
+    source = stdStringGs . c_str ();
+    glShaderSource ( geometryShader , 1, &source , 0);
+    // Compile the fragment shader
+    glCompileShader ( geometryShader );
+    glGetShaderiv ( geometryShader , GL_COMPILE_STATUS , & isCompiled );
+    if (isCompiled==GL_FALSE)
+    {
+        GLint maxLength = 0;
+        glGetShaderiv ( geometryShader , GL_INFO_LOG_LENGTH , &
+        maxLength );
+        std :: vector <GLchar > infoLog ( maxLength );
+        glGetShaderInfoLog ( geometryShader , maxLength , & maxLength ,
+        & infoLog [0]) ;
+        qDebug ("%s", & infoLog [0]) ;
+        glDeleteShader ( geometryShader );
+        glDeleteShader ( vertexShader );
+        return ;
+    }
+
+
+
 
     // Create an empty fragment shader handle
     GLuint fragmentShader = 0;
@@ -125,6 +159,7 @@ void OpenGLWidget::createShaders()
     shaderProgram = glCreateProgram();
     // Attach our shaders to our program
     glAttachShader( shaderProgram , vertexShader );
+    glAttachShader( shaderProgram , geometryShader );
     glAttachShader ( shaderProgram , fragmentShader );
     // Link our program
     glLinkProgram( shaderProgram );
@@ -148,10 +183,13 @@ void OpenGLWidget::createShaders()
     }
 
     glDetachShader( shaderProgram , vertexShader );
+    glDetachShader( shaderProgram , geometryShader );
     glDetachShader ( shaderProgram , fragmentShader );
     glDeleteShader( vertexShader );
+    glDeleteShader ( geometryShader );
     glDeleteShader ( fragmentShader );
     vs.close ();
+    gs.close ();
     fs.close ();
 }
 

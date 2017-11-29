@@ -1,9 +1,9 @@
 # version 400
-in vec4 v2fcolor;
-out vec4 myfragcolor;
+in vec3 fs_color;
 
-void main ()
+out vec4 out_Color;
+
+void main(void)
 {
-    myfragcolor = v2fcolor ;
-    //myfragcolor = vec4(0.5, 0.5, 1.0, 1.0);
+        out_Color = vec4(fs_color, 1.0f);
 }

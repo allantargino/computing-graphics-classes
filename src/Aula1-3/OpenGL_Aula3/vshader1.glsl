@@ -1,14 +1,12 @@
 # version 400
-//(in)put variables processed in parallel
-layout ( location = 0) in vec4 vPosition;
-layout ( location = 1) in vec4 vColors;
+layout (location = 0) in vec3 in_Position;
+layout (location = 1) in vec3 in_Color;
 
-//(out)put variable interpolated at fragment shader raster
-out vec4 v2fcolor;
-void main ()
+out vec3 vs_color;
+
+void main(void)
 {
-    // gl_Position ->out builtin variable
-    gl_PointSize = 20.0;
-    gl_Position = vPosition ;
-    v2fcolor = vColors ;
+    //gl_PointSize = 20.0;
+    gl_Position = vec4(in_Position.xyz, 1.0);
+    vs_color = in_Color;
 }
